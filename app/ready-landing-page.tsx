@@ -1,9 +1,0 @@
-import ParentViewComponent from '../components/ParentViewComponent';
-
-export default function Page() {
-  return (
-    <div>
-      <ParentViewComponent />
-    </div>
-  );
-}

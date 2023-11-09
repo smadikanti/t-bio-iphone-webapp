@@ -12,9 +12,10 @@ const panelContent = [
 export default function Page() {
   const [textSize, setTextSize] = useState('medium');
   const [currentPanel, setCurrentPanel] = useState(1);
-  const [visiblePages, setVisiblePages] = useState([]);
+  const [visiblePages, setVisiblePages] = useState<number[]>([]);
   const [hideContent, setHideContent] = useState(false); // State variable to toggle content visibility
-  const contentRef = useRef(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
 
   useEffect(() => {
     const numPanels = panelContent.length;
@@ -37,7 +38,7 @@ export default function Page() {
     setVisiblePages(pages);
   }, [currentPanel]);
 
-  const handleTextSizeChange = (size) => {
+  const handleTextSizeChange = (size: any) => {
     setTextSize(size);
   };
 
@@ -65,7 +66,7 @@ export default function Page() {
     ));
   };
 
-  const handlePanelChange = (newPanel) => {
+  const handlePanelChange = (newPanel: number) => {
     setCurrentPanel(newPanel);
     // Scroll to the selected panel
     if (contentRef.current) {
