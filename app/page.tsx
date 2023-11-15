@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import CountdownTimer from '../components/CountdownTimer';
 import { doStream } from '../components/RevAI';
 import RevViewHelper from '../components/RevViewHelper';
+import DropDown, { VibeType } from '../components/DropDown';
 import { transcriptBuffer } from '../components/RevAI';
 import { useChat } from 'ai/react';
 import { toast } from 'react-hot-toast';
@@ -24,7 +25,7 @@ export default function Page() {
   const contentRef = useRef<HTMLDivElement>(null);
 
   const [bio, setBio] = useState('');
-  const [vibe, setVibe] = useState<VibeType>('Professional');
+  const [vibe, setVibe] = useState<VibeType>("Interview");
   const bioRef = useRef<null | HTMLDivElement>(null);
 
   const scrollToBios = () => {
