@@ -1,0 +1,165 @@
+// "use client"
+// import React, { useState, useRef, useEffect } from 'react';
+// import CountdownTimer from '../components/CountdownTimer'; // Import the CountdownTimer component
+// import { doStream } from '../components/RevAI'
+// import RevViewHelper from '../components/RevViewHelper';
+
+// const panelContent = [
+//   "Of course. I'm currently working as a senior software engineer in the Digital Acquisition team at American Express. Our team is responsible for developing and maintaining the APIs that power the online application process for American Express credit cards. We work closely with our business partners in marketing and product management to ensure that the application process is smooth and user-friendly for our customers.",
+//   "Our team consists of 8 software engineers, a product manager, and a QA engineer. We work in an Agile environment and use Scrum as our development framework.",
+//   "Our clients are primarily the web and mobile applications that American Express offers to its customers. These applications allow customers to apply for credit cards online, view account information, and perform other banking tasks. In addition, we also have internal clients such as our risk management and compliance teams, who rely on our APIs to ensure that our online application process meets regulatory requirements.",
+//   "Sure, one simple business use-case is the ability to pre-fill the credit card application form with the customer's personal information. This saves our customers time and effort, and makes the application process more seamless. For example, if a customer has an American Express account and is already logged into our website, we can use our APIs to retrieve their personal information such as name, address, and social security number, and pre-fill the application form with that information. This simplifies the application process and makes it more convenient for the customer, which ultimately leads to a better customer experience."
+// ];
+
+// export default function Page() {
+//   const [textSize, setTextSize] = useState('medium');
+//   const [currentPanel, setCurrentPanel] = useState(1);
+//   const [visiblePages, setVisiblePages] = useState<number[]>([]);
+//   const [hideContent, setHideContent] = useState(false); // State variable to toggle content visibility
+//   const contentRef = useRef<HTMLDivElement>(null);
+
+//   useEffect(() => {
+//     const numPanels = panelContent.length;
+//     const pageSize = window.innerHeight;
+//     const totalHeight = numPanels * pageSize;
+
+//     // Calculate the maximum number of pages to display
+//     const maxPages = Math.ceil(totalHeight / pageSize);
+
+//     // Determine the current page range based on the currentPanel
+//     const startPage = Math.max(currentPanel - 2, 1);
+//     const endPage = Math.min(startPage + 3, maxPages);
+
+//     // Generate the visible page numbers
+//     const pages = [];
+//     for (let i = startPage; i <= endPage; i++) {
+//       pages.push(i);
+//     }
+
+//     setVisiblePages(pages);
+//   }, [currentPanel]);
+
+//   const handleTextSizeChange = (size: any) => {
+//     setTextSize(size);
+//   };
+
+//   const toggleContentVisibility = () => {
+//     setHideContent(!hideContent); // Toggle the hideContent state
+//   };
+
+//   const renderPanels = () => {
+//     return panelContent.map((content, index) => (
+//       <div
+//         key={index}
+//         style={{
+//           minHeight: '100vh',
+//           display: 'flex',
+//           justifyContent: 'center',
+//           alignItems: 'center',
+//           scrollSnapAlign: 'start',
+//           backgroundColor: index % 2 === 0 ? '#f8f9fa' : '#e9ecef',
+//         }}
+//       >
+//         <p style={{ maxWidth: '90%', margin: '0 auto', fontSize: textSize === 'small' ? '16px' : (textSize === 'large' ? '20px' : '18px'), lineHeight: '1.6' }}>
+//           {content}
+//         </p>
+
+//       </div>
+//     ));
+//   };
+
+//   const handlePanelChange = (newPanel: number) => {
+//     setCurrentPanel(newPanel);
+//     // Scroll to the selected panel
+//     if (contentRef.current) {
+//       const pageSize = window.innerHeight;
+//       contentRef.current.scrollTop = (newPanel - 1) * pageSize;
+//     }
+//   };
+
+//   // Dynamically generate all page numbers
+//   const generatePageNumbers = () => {
+//     const numPanels = panelContent.length;
+//     const maxPages = Math.ceil(numPanels / 3);
+//     const pages = [];
+
+//     for (let i = 1; i <= maxPages; i++) {
+//       pages.push(i);
+//     }
+
+//     return pages;
+//   };
+
+//   return (
+//     <div ref={contentRef} style={{ scrollSnapType: 'y mandatory', overflowY: 'scroll', height: '100vh' }}>
+//       {/* Branding element */}
+//       <div style={{ position: 'fixed', top: '20px', left: '20px', color: 'black', fontWeight: 'bold', fontSize: '16px' }}>
+//         AI Proxy
+//       </div>
+      
+//       {renderPanels()}
+
+//       {/* Conditional rendering for buttons, page numbers, and timer */}
+//       {!hideContent && (
+//         <>
+//           {/* Page numbers (bottom right) */}
+//           <div style={{ position: 'fixed', bottom: '20px', right: '20px' }}>
+//             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+//               {generatePageNumbers().map((page) => (
+//                 <button
+//                   key={page}
+//                   onClick={() => handlePanelChange(page)}
+//                   style={{
+//                     marginRight: '10px',
+//                     backgroundColor: currentPanel === page ? 'black' : 'transparent',
+//                     color: currentPanel === page ? 'white' : 'black',
+//                     padding: '5px 10px',
+//                     borderRadius: '5px'
+//                   }}
+//                 >
+//                   {page}
+//                 </button>
+//               ))}
+//             </div>
+//           </div>
+
+//           {/* Text size buttons (bottom left) */}
+//           <div style={{ position: 'fixed', bottom: '20px', left: '20px' }}>
+//             <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+//               <button onClick={() => handleTextSizeChange('small')} style={{ marginRight: '10px', backgroundColor: textSize === 'small' ? 'black' : 'transparent', color: textSize === 'small' ? 'white' : 'black', padding: '5px 10px', borderRadius: '5px' }}>S</button>
+//               <button onClick={() => handleTextSizeChange('medium')} style={{ marginRight: '10px', backgroundColor: textSize === 'medium' ? 'black' : 'transparent', color: textSize === 'medium' ? 'white' : 'black', padding: '5px 10px', borderRadius: '5px' }}>M</button>
+//               <button onClick={() => handleTextSizeChange('large')} style={{ backgroundColor: textSize === 'large' ? 'black' : 'transparent', color: textSize === 'large' ? 'white' : 'black', padding: '5px 10px', borderRadius: '5px' }}>L</button>
+//             </div>
+//           </div>
+
+
+//           {/* Include the CountdownTimer component (top right) */}
+//           <div style={{ position: 'fixed', top: '20px', right: '20px' }}>
+//             <CountdownTimer />
+//           </div>
+//         </>
+//       )}
+
+//       {/* Hide/unhide button (bottom center) */}
+//       <div style={{ position: 'fixed', bottom: '20px', left: '50%', transform: 'translateX(-50%)' }}>
+//         <button onClick={toggleContentVisibility}>
+//           {hideContent ? 'Unhide' : 'Hide'}
+//         </button>
+//       </div>
+
+//       {/* Start Interview button */}
+//       <div style={{ position: 'fixed', bottom: '200px', left: '200px' }}>
+//         <RevViewHelper/>
+//         {/* <button id="streamButton" onClick={() => 
+//           // alert('Interview started!');
+//           doStream()
+//           } style={{ backgroundColor: 'blue', color: 'white', padding: '10px 20px', borderRadius: '5px' }}>
+//           Start Interview
+//         </button>
+//         <p id="status"></p>
+//       <table id="messages"></table> */}
+
+//       </div>
+//     </div>
+//   );
+// }
