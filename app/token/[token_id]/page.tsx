@@ -14,7 +14,7 @@ const acceptedTokens = [
     '6',
     '7',
 ];
-export async function isAcceptedToken(tokenId: string) {
+async function isAcceptedToken(tokenId: string) {
     return acceptedTokens.includes(tokenId);
 }
 
