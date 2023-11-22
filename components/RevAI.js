@@ -99,7 +99,6 @@ function onMessage(event) {
       transcriptBuffer =
         transcriptBuffer.slice(0, lastIndex) + contentFromCurrentRevCell;
       sharedTranscript = transcriptBuffer
-      updateBio(transcriptBuffer)
       break;
     case 'final':
       currentCell.innerHTML = parseResponse(data);

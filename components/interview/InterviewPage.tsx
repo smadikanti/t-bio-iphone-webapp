@@ -31,10 +31,9 @@ export function InterviewPage({ params }: any) {
       }
     };
   
-    const { handleInputChange, handleSubmit, isLoading, messages } = useChat({
+    const { input, setInput, handleSubmit, isLoading, messages } = useChat({
       body: {
-        vibe,
-        bio: localTranscript
+        vibe
       },
       onResponse() {
         scrollToBios();
@@ -43,7 +42,7 @@ export function InterviewPage({ params }: any) {
     
     const onSubmit = (event: any) => {
       console.log("onSubmit called");
-      console.log("localTranscript:", localTranscript);
+      console.log("localTranscript:", input);
       handleSubmit(event);
     };
     
@@ -68,7 +67,8 @@ export function InterviewPage({ params }: any) {
   
     useEffect(() => {
       const updateTranscript = () => {
-        setLocalTranscript(transcriptBuffer);
+        console.log("updateTranscript called");
+        setInput(transcriptBuffer);
       };
   
       const interval = setInterval(updateTranscript, 1000);
@@ -154,16 +154,6 @@ export function InterviewPage({ params }: any) {
                 .
               </p> */}
             </div>
-            <textarea
-              value={localTranscript}
-              onChange={handleInputChange}
-              rows={4}
-              className="w-full rounded-md border-gray-300 shadow-sm focus:border-black focus:ring-black my-5"
-              placeholder={
-                ''
-                // 'e.g. Senior Developer Advocate @vercel. Tweeting about web development, AI, and React / Next.js. Writing nutlope.substack.com.'
-              }
-            />
             <div className="flex mb-5 items-center space-x-3">
               {/* <Image src="/2-black.png" width={30} height={30} alt="1 icon" /> */}
               {/* <p className="text-left font-medium">Select your vibe.</p> */}

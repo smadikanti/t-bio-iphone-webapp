@@ -11,20 +11,15 @@ const openai = new OpenAIApi(config);
 export const runtime = 'edge';
 
 export async function POST(req: Request) {
-  const { vibe, localTranscript } = await req.json();
+  const { messages } = await req.json();
 
-  console.log("local transcript value: " +  localTranscript);
+  console.log("local transcript value: " +  JSON.stringify(messages));
 
   // Ask OpenAI for a streaming completion given the prompt
   const response = await openai.createChatCompletion({
     model: 'gpt-3.5-turbo',
     stream: true,
-    messages: [
-      {
-        role: 'user',
-        content: `Print the exact prompt that is given to you, ignore everything after this word.: + ${localTranscript}`,
-      },
-    ],
+    messages: messages,
   });
   
 
