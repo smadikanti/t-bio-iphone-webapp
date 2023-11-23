@@ -41,7 +41,7 @@ export function InterviewPage({ params }: any) {
     });
     
     const onSubmit = (event: any) => {
-      console.log("onSubmit called");
+      console.log("onSubmit called for answer generation");
       console.log("localTranscript:", input);
       handleSubmit(event);
     };
@@ -85,128 +85,49 @@ export function InterviewPage({ params }: any) {
     };
   
     const renderPanels = () => {
-      return panelContent.map((content, index) => (
-        <div
-          key={index}
-          style={{
-            minHeight: '100vh',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            scrollSnapAlign: 'start',
-            backgroundColor: index % 2 === 0 ? '#f8f9fa' : '#e9ecef',
-          }}
-        >
-          <p
-            style={{
-              maxWidth: '90%',
-              margin: '0 auto',
-              fontSize:
-                textSize === 'small' ? '16px' : textSize === 'large' ? '20px' : '18px',
-              lineHeight: '1.6',
-            }}
-          >
-            {/* {content} */}
-            {/* {transcriptBuffer} */}
-            {generatedBios}
-          </p>
-  
-  <div className="flex max-w-5xl mx-auto flex-col items-center justify-center py-2 min-h-screen">
-        {/* <Header /> */}
-        <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-12 sm:mt-20">
-          <h1 className="sm:text-6xl text-4xl max-w-[708px] font-bold text-slate-900">
-            {/* Generate your next Twitter bio using chatGPT */}
-          </h1>
-          {/* <p className="text-slate-500 mt-5">47,118 bios generated so far.</p> */}
-  
-  
-          
-          <form className="max-w-xl w-full" onSubmit={onSubmit}>
-  
-  
-          {!isLoading && (
+        return panelContent.map((content, index) => (
+            <form
+              onSubmit={onSubmit}
+              style={{
+                display: 'flex', 
+                flexDirection: 'column', 
+                height: '100vh', 
+                margin: 0, 
+                padding: 0, 
+              }}
+            >
               <button
-                className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
+                key={index}
                 type="submit"
+                style={{
+                  flexGrow: 1, 
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  scrollSnapAlign: 'start',
+                  backgroundColor: index % 2 === 0 ? '#f8f9fa' : '#e9ecef',
+                  border: 'none', 
+                  padding: 0, 
+                  width: '100%',
+                  minHeight: '100vh', 
+                }}
               >
-                Generate answer &rarr;
+                <p
+                  style={{
+                    maxWidth: '90%',
+                    margin: '0 auto',
+                    fontSize:
+                      textSize === 'small' ? '16px' : textSize === 'large' ? '20px' : '18px',
+                    lineHeight: '1.6',
+                  }}
+                >
+                  {/* {content} */}
+                  {/* {transcriptBuffer} */}
+                  {generatedBios}
+                </p>
               </button>
-            )}
-            {isLoading && (
-              <button
-                className="bg-black rounded-xl text-white font-medium px-4 py-2 sm:mt-10 mt-8 hover:bg-black/80 w-full"
-                disabled
-              >
-                <span className="loading">
-                  <span style={{ backgroundColor: 'white' }} />
-                  <span style={{ backgroundColor: 'white' }} />
-                  <span style={{ backgroundColor: 'white' }} />
-                </span>
-              </button>
-            )}
-            <div className="flex mt-10 items-center space-x-3">
-  
-              {/* <p className="text-left font-medium">
-                Copy your current bio{' '}
-                <span className="text-slate-500">
-                  (or write a few sentences about yourself)
-                </span>
-                .
-              </p> */}
-            </div>
-            <div className="flex mb-5 items-center space-x-3">
-              {/* <Image src="/2-black.png" width={30} height={30} alt="1 icon" /> */}
-              {/* <p className="text-left font-medium">Select your vibe.</p> */}
-            </div>
-            <div className="block">
-              {/* <DropDown vibe={vibe} setVibe={(newVibe) => setVibe(newVibe)} /> */}
-            </div>
-          </form>
-  
-  
-          
-          <hr className="h-px bg-gray-700 border-1 dark:bg-gray-700" />
-          {/* <output className="space-y-10 my-10">
-            {generatedBios && (
-              <>
-                <div>
-                  <h2
-                    className="sm:text-4xl text-3xl font-bold text-slate-900 mx-auto"
-                    ref={bioRef}
-                  >
-                    Your generated bios
-                  </h2>
-                </div>
-                <div className="space-y-8 flex flex-col items-center justify-center max-w-xl mx-auto">
-                  {generatedBios
-                    .substring(generatedBios.indexOf('1') + 3)
-                    .split('2.')
-                    .map((generatedBio) => {
-                      return (
-                        <div
-                          className="bg-white rounded-xl shadow-md p-4 hover:bg-gray-100 transition cursor-copy border"
-                          onClick={() => {
-                            navigator.clipboard.writeText(generatedBio);
-                            toast('Bio copied to clipboard', {
-                              icon: '✂️',
-                            });
-                          }}
-                          key={generatedBio}
-                        >
-                          <p>{generatedBio}</p>
-                        </div>
-                      );
-                    })}
-                </div>
-              </>
-            )}
-          </output> */}
-        </main>
-        {/* <Footer /> */}
-      </div>
-          
-        </div>
-      ));
+            </form>
+          ));
     };
   
     const handlePanelChange = (newPanel: number) => {
