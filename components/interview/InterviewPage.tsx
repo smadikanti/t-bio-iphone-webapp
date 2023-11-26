@@ -5,6 +5,9 @@ import DropDown, { VibeType } from '../DropDown';
 import { transcriptBuffer } from '../RevAI';
 import { useChat } from 'ai/react';
 
+const MAX_TRANSCRIPT_TOKEN_LENGTH = 4000;
+const MAX_TRANSCRIPT_CHAR_LENGTH = MAX_TRANSCRIPT_TOKEN_LENGTH * 4;
+
 // Define the initial panel content
 const panelContent = [
   "Of course. I'm currently working as a senior software engineer in the Digital Acquisition team at American Express. Our team is responsible for developing and maintaining the APIs that power the online application process for American Express credit cards. We work closely with our business partners in marketing and product management to ensure that the application process is smooth and user-friendly for our customers.",
@@ -14,40 +17,87 @@ const panelContent = [
 ];
 
 export function InterviewPage({ params }: any) {
-    const [localTranscript, setLocalTranscript] = useState(transcriptBuffer);
     const [textSize, setTextSize] = useState('medium');
     const [currentPanel, setCurrentPanel] = useState(1);
     const [visiblePages, setVisiblePages] = useState<number[]>([]);
     const [hideContent, setHideContent] = useState(false);
     const contentRef = useRef<HTMLDivElement>(null);
+    const [buttonPressCount, setButtonPressCount] = useState(0);
+    const [generatedBiosArray, setGeneratedBiosArray] = useState([] as string[]);
   
     const [bio, setBio] = useState('');
     const [vibe, setVibe] = useState<VibeType>("Interview");
-    const bioRef = useRef<null | HTMLDivElement>(null);
   
-    const scrollToBios = () => {
-      if (bioRef.current !== null) {
-        bioRef.current.scrollIntoView({ behavior: 'smooth' });
-      }
-    };
-  
-    const { input, setInput, handleSubmit, isLoading, messages } = useChat({
+    const { input, setInput, handleSubmit, isLoading, messages, setMessages } = useChat({
       body: {
         vibe
-      },
-      onResponse() {
-        scrollToBios();
-      },
+      }
     });
+
+    const filterAllAssistantResponses = (messages: any) => {
+      const filteredMessages = messages.filter((message: any) => message.role === 'user');
+      return filteredMessages;
+    }
+
+    const getShortenedMessages = (messages: any) => {
+      const filteredMessages = filterAllAssistantResponses(messages);
+
+      // now make sure that the content is not too long. If it is, then shorten it starting from the first message
+      let totalLength = 0;
+      for (let i = 0; i < filteredMessages.length; i++) {
+        totalLength += filteredMessages[i].content.length;
+      }
+
+      if (totalLength <= MAX_TRANSCRIPT_CHAR_LENGTH) {
+        return filteredMessages;
+      }
+
+      // shorten or remove messages until the total length is less than maxCharLength
+      let removedCharLength = 0;
+      for (let i = 0; i < filteredMessages.length; i++) {
+        removedCharLength += filteredMessages[i].content.length;
+        if (removedCharLength > MAX_TRANSCRIPT_CHAR_LENGTH) {
+          // shorten this message by removing characters from the beginning
+          const numCharsToRemove = removedCharLength - MAX_TRANSCRIPT_CHAR_LENGTH;
+          const newContent = filteredMessages[i].content.substring(numCharsToRemove);
+          filteredMessages[i].content = newContent;
+          break;
+        }
+        else {
+          // remove this message
+          filteredMessages.splice(i, 1);
+          i--;
+        }
+      }
+      return filteredMessages;
+    }
     
     const onSubmit = (event: any) => {
-      console.log("onSubmit called for answer generation");
-      console.log("localTranscript:", input);
+      // save the current message to the bios array
+      const oldBiosArray = generatedBiosArray;
+      if (generatedBios !== '' && generatedBios) {
+        oldBiosArray.push(generatedBios);
+        console.log("oldBiosArray: ", oldBiosArray)
+        setGeneratedBiosArray(oldBiosArray);
+      }
+      event.preventDefault();
+
       handleSubmit(event);
+   
+      // scroll to the next panel
+      if (contentRef.current) {
+        const targetPanel = contentRef.current.children[buttonPressCount+1];
+        if (targetPanel) {
+            targetPanel.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+
+      setButtonPressCount(buttonPressCount + 1);
+      console.log("buttonPressCount: ", buttonPressCount);
     };
     
     const lastMessage = messages[messages.length - 1];
-    const generatedBios = lastMessage?.role === 'assistant' ? lastMessage.content : null;
+    const generatedBios = lastMessage?.role === 'assistant' ? lastMessage.content : '';
   
     useEffect(() => {
       const numPanels = panelContent.length;
@@ -85,49 +135,60 @@ export function InterviewPage({ params }: any) {
     };
   
     const renderPanels = () => {
-        return panelContent.map((content, index) => (
-            <form
-              onSubmit={onSubmit}
+      const getPanelMessage = (index: number) => {
+        if (index < generatedBiosArray.length) {
+          return generatedBiosArray[index];
+        }
+        else if (index == generatedBiosArray.length) {
+          return generatedBios;
+        } else {
+          return '';
+        }
+      }
+
+      return panelContent.map((content, index) => (
+          <form
+            onSubmit={onSubmit}
+            style={{
+              display: 'flex', 
+              flexDirection: 'column', 
+              height: '100vh', 
+              margin: 0, 
+              padding: 0, 
+            }}
+          >
+            <button
+              key={index}
+              type="submit"
               style={{
-                display: 'flex', 
-                flexDirection: 'column', 
-                height: '100vh', 
-                margin: 0, 
+                flexGrow: 1, 
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                scrollSnapAlign: 'start',
+                backgroundColor: index % 2 === 0 ? '#f8f9fa' : '#e9ecef',
+                border: 'none', 
                 padding: 0, 
+                width: '100%',
+                minHeight: '100vh', 
               }}
             >
-              <button
-                key={index}
-                type="submit"
+              <p
                 style={{
-                  flexGrow: 1, 
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  scrollSnapAlign: 'start',
-                  backgroundColor: index % 2 === 0 ? '#f8f9fa' : '#e9ecef',
-                  border: 'none', 
-                  padding: 0, 
-                  width: '100%',
-                  minHeight: '100vh', 
+                  maxWidth: '90%',
+                  margin: '0 auto',
+                  fontSize:
+                    textSize === 'small' ? '16px' : textSize === 'large' ? '20px' : '18px',
+                  lineHeight: '1.6',
                 }}
               >
-                <p
-                  style={{
-                    maxWidth: '90%',
-                    margin: '0 auto',
-                    fontSize:
-                      textSize === 'small' ? '16px' : textSize === 'large' ? '20px' : '18px',
-                    lineHeight: '1.6',
-                  }}
-                >
-                  {/* {content} */}
-                  {/* {transcriptBuffer} */}
-                  {generatedBios}
-                </p>
-              </button>
-            </form>
-          ));
+                {/* {content} */}
+                {/* {transcriptBuffer} */}
+                {getPanelMessage(index)}
+              </p>
+            </button>
+          </form>
+      ));
     };
   
     const handlePanelChange = (newPanel: number) => {
