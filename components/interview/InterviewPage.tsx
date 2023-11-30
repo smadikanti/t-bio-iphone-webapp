@@ -6,7 +6,8 @@ import { transcriptBuffer } from '../RevAI';
 import { useChat } from 'ai/react';
 
 const MAX_TRANSCRIPT_TOKEN_LENGTH = 4000;
-const MAX_TRANSCRIPT_CHAR_LENGTH = MAX_TRANSCRIPT_TOKEN_LENGTH * 4;
+const DEFAULT_CHARACTERS_PER_TOKEN = 4;
+const MAX_TRANSCRIPT_CHAR_LENGTH = MAX_TRANSCRIPT_TOKEN_LENGTH * DEFAULT_CHARACTERS_PER_TOKEN;
 
 // Define the initial panel content
 const panelContent = [
@@ -16,7 +17,7 @@ const panelContent = [
   "Sure, one simple business use-case is the ability to pre-fill the credit card application form with the customer's personal information. This saves our customers time and effort, and makes the application process more seamless. For example, if a customer has an American Express account and is already logged into our website, we can use our APIs to retrieve their personal information such as name, address, and social security number, and pre-fill the application form with that information. This simplifies the application process and makes it more convenient for the customer, which ultimately leads to a better customer experience."
 ];
 
-export function InterviewPage({ params }: any) {
+export function InterviewPage({ params, intervieweeData }: any) {
     const [textSize, setTextSize] = useState('medium');
     const [currentPanel, setCurrentPanel] = useState(1);
     const [visiblePages, setVisiblePages] = useState<number[]>([]);
@@ -81,6 +82,7 @@ export function InterviewPage({ params }: any) {
         setGeneratedBiosArray(oldBiosArray);
       }
       event.preventDefault();
+      setMessages(getShortenedMessages(messages));
 
       handleSubmit(event);
    
