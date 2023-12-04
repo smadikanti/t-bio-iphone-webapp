@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { doStream } from './RevAI.js';
 
 function RevViewHelper({ }) {
@@ -13,11 +13,15 @@ function RevViewHelper({ }) {
     boxShadow: '3px 3px 5px rgba(0, 0, 0, 0.3)', // Add box shadow
   };
 
+  useEffect(() => {
+    doStream();
+  }, []);
+
   return (
     <div>
       {/* <p>Rev.ai Browser Streaming Example</p> */}
       {/* <button id="streamButton" onClick={doStream}> */}
-      <button id="streamButton" onClick={() => doStream()} style={buttonStyles}>
+      <button id="streamButton" onClick={() => doStream()} style={{ display: "none" }}>
         Start Interview
       </button>
       <p id="status"></p>

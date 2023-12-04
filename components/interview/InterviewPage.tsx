@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import CountdownTimer from '../CountdownTimer';
 import RevViewHelper from '../RevViewHelper';
 import DropDown, { VibeType } from '../DropDown';
-import { transcriptBuffer } from '../RevAI';
+import { doStream, transcriptBuffer } from '../RevAI';
 import { useChat } from 'ai/react';
 
 const MAX_TRANSCRIPT_TOKEN_LENGTH = 4000;
@@ -129,14 +129,14 @@ export function InterviewPage({ params, intervieweeData }: any) {
   
       setVisiblePages(pages);
     }, [currentPanel]);
-  
+ 
     useEffect(() => {
       const updateTranscript = () => {
         console.log("updateTranscript called");
         setInput(transcriptBuffer);
       };
   
-      const interval = setInterval(updateTranscript, 1000);
+      const interval = setInterval(updateTranscript, 200);
   
       return () => clearInterval(interval);
     }, []);
@@ -247,27 +247,6 @@ export function InterviewPage({ params, intervieweeData }: any) {
         {/* Conditional rendering for buttons, page numbers, and timer */}
         {!hideContent && (
           <>
-            {/* Page numbers (bottom right) */}
-            <div style={{ position: 'fixed', bottom: '20px', right: '20px' }}>
-              <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                {generatePageNumbers().map((page) => (
-                  <button
-                    key={page}
-                    onClick={() => handlePanelChange(page)}
-                    style={{
-                      marginRight: '10px',
-                      backgroundColor: currentPanel === page ? 'black' : 'transparent',
-                      color: currentPanel === page ? 'white' : 'black',
-                      padding: '5px 10px',
-                      borderRadius: '5px',
-                    }}
-                  >
-                    {page}
-                  </button>
-                ))}
-              </div>
-            </div>
-  
             {/* Text size buttons (bottom left) */}
             <div style={{ position: 'fixed', bottom: '20px', left: '20px' }}>
               <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
