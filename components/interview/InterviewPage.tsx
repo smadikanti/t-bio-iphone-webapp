@@ -43,10 +43,23 @@ export function InterviewPage({ params, intervieweeData }: any) {
     const getShortenedMessages = (messages: any) => {
       const filteredMessages = filterAllAssistantResponses(messages);
 
-      // now make sure that the content is not too long. If it is, then shorten it starting from the first message
       let totalLength = 0;
       for (let i = 0; i < filteredMessages.length; i++) {
         totalLength += filteredMessages[i].content.length;
+      }
+
+      const resumeContext = `Pretend to be this interviewee and answer questions to pass the job interview.
+        When giving answers, use the STAR method and be direct and concise. Use specific details
+        and clear explanations to demonstrate the validity of your experience.
+        Interviewee\'s resume: ` + intervieweeData.resume;
+      const jobDescription = 'Current interview\s job description: ' + intervieweeData.jobDescription;
+
+      // add resume and job description to the beginning of the transcript if they are not already there
+      if (filteredMessages.length <= 1 || filteredMessages[0].content !== resumeContext) {
+        filteredMessages.unshift({role: 'system', content: resumeContext});
+      }
+      if (filteredMessages.length <= 2 || filteredMessages[1].content !== jobDescription) {
+        filteredMessages.splice(1, 0, {role: 'system', content: jobDescription});
       }
 
       if (totalLength <= MAX_TRANSCRIPT_CHAR_LENGTH) {
@@ -55,7 +68,7 @@ export function InterviewPage({ params, intervieweeData }: any) {
 
       // shorten or remove messages until the total length is less than maxCharLength
       let removedCharLength = 0;
-      for (let i = 0; i < filteredMessages.length; i++) {
+      for (let i = 2; i < filteredMessages.length; i++) {
         removedCharLength += filteredMessages[i].content.length;
         if (removedCharLength > MAX_TRANSCRIPT_CHAR_LENGTH) {
           // shorten this message by removing characters from the beginning
