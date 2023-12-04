@@ -52,7 +52,7 @@ export function endStream() {
 function onOpen(event) {
   genieListening = true;
   resetDisplay();
-  statusElement.innerHTML = 'Opened';
+  console.log('Stream opened');
   navigator.mediaDevices.getUserMedia({ audio: true }).then((micStream) => {
     audioContext.suspend();
     var scriptNode = audioContext.createScriptProcessor(4096, 1, 1);
@@ -90,7 +90,7 @@ function onMessage(event) {
   var data = JSON.parse(event.data);
   switch (data.type) {
     case 'connected':
-      statusElement.innerHTML = `Connected, job id is ${data.id}`;
+      console.log('Stream connected');
       break;
     case 'partial':
       currentCell.innerHTML = parseResponse(data);

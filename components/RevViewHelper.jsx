@@ -21,7 +21,7 @@ function RevViewHelper({ }) {
         Start Interview
       </button>
       <p id="status"></p>
-      <table id="messages"></table>
+      <table id="messages" style={{ display: "none" }}></table>
     </div>
     // <></>
   );
