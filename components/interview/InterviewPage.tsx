@@ -9,18 +9,9 @@ const MAX_TRANSCRIPT_TOKEN_LENGTH = 4000;
 const DEFAULT_CHARACTERS_PER_TOKEN = 4;
 const MAX_TRANSCRIPT_CHAR_LENGTH = MAX_TRANSCRIPT_TOKEN_LENGTH * DEFAULT_CHARACTERS_PER_TOKEN;
 
-// Define the initial panel content
-const panelContent = [
-  "Of course. I'm currently working as a senior software engineer in the Digital Acquisition team at American Express. Our team is responsible for developing and maintaining the APIs that power the online application process for American Express credit cards. We work closely with our business partners in marketing and product management to ensure that the application process is smooth and user-friendly for our customers.",
-  "Our team consists of 8 software engineers, a product manager, and a QA engineer. We work in an Agile environment and use Scrum as our development framework.",
-  "Our clients are primarily the web and mobile applications that American Express offers to its customers. These applications allow customers to apply for credit cards online, view account information, and perform other banking tasks. In addition, we also have internal clients such as our risk management and compliance teams, who rely on our APIs to ensure that our online application process meets regulatory requirements.",
-  "Sure, one simple business use-case is the ability to pre-fill the credit card application form with the customer's personal information. This saves our customers time and effort, and makes the application process more seamless. For example, if a customer has an American Express account and is already logged into our website, we can use our APIs to retrieve their personal information such as name, address, and social security number, and pre-fill the application form with that information. This simplifies the application process and makes it more convenient for the customer, which ultimately leads to a better customer experience."
-];
-
 export function InterviewPage({ params, intervieweeData }: any) {
     const [textSize, setTextSize] = useState('medium');
-    const [currentPanel, setCurrentPanel] = useState(1);
-    const [visiblePages, setVisiblePages] = useState<number[]>([]);
+    const [panelElements, setPanelElements] = useState([] as any[]);
     const [hideContent, setHideContent] = useState(false);
     const contentRef = useRef<HTMLDivElement>(null);
     const [buttonPressCount, setButtonPressCount] = useState(0);
@@ -99,13 +90,17 @@ export function InterviewPage({ params, intervieweeData }: any) {
 
       handleSubmit(event);
    
-      // scroll to the next panel
-      if (contentRef.current) {
-        const targetPanel = contentRef.current.children[buttonPressCount+1];
-        if (targetPanel) {
-            targetPanel.scrollIntoView({ behavior: 'smooth' });
+      // wait 200ms and scroll to next panel to make sure the state has been updated
+      setTimeout(() => {
+        if (contentRef.current) {
+          const targetPanel = contentRef.current.getElementsByTagName('form')[buttonPressCount];
+          console.log("forms: ", contentRef.current.getElementsByTagName('form'))
+          console.log("targetPanel: ", targetPanel)
+          if (targetPanel) {
+              targetPanel.scrollIntoView({ behavior: 'smooth' });
+          }
         }
-      }
+      }, 200);
 
       setButtonPressCount(buttonPressCount + 1);
       console.log("buttonPressCount: ", buttonPressCount);
@@ -113,30 +108,13 @@ export function InterviewPage({ params, intervieweeData }: any) {
     
     const lastMessage = messages[messages.length - 1];
     const generatedBios = lastMessage?.role === 'assistant' ? lastMessage.content : '';
-  
-    useEffect(() => {
-      const numPanels = panelContent.length;
-      const pageSize = window.innerHeight;
-      const totalHeight = numPanels * pageSize;
-      const maxPages = Math.ceil(totalHeight / pageSize);
-      const startPage = Math.max(currentPanel - 2, 1);
-      const endPage = Math.min(startPage + 3, maxPages);
-  
-      const pages = [];
-      for (let i = startPage; i <= endPage; i++) {
-        pages.push(i);
-      }
-  
-      setVisiblePages(pages);
-    }, [currentPanel]);
  
     useEffect(() => {
       const updateTranscript = () => {
-        console.log("updateTranscript called");
         setInput(transcriptBuffer);
       };
   
-      const interval = setInterval(updateTranscript, 200);
+      const interval = setInterval(updateTranscript, 100);
   
       return () => clearInterval(interval);
     }, []);
@@ -161,7 +139,9 @@ export function InterviewPage({ params, intervieweeData }: any) {
         }
       }
 
-      return panelContent.map((content, index) => (
+      const generatedBiosArrayWithPadding = [...generatedBiosArray, ''];
+
+      const foundPanels = generatedBiosArrayWithPadding.map((content, index) => (
           <form
             onSubmit={onSubmit}
             style={{
@@ -204,28 +184,14 @@ export function InterviewPage({ params, intervieweeData }: any) {
             </button>
           </form>
       ));
+
+      return foundPanels;
     };
-  
-    const handlePanelChange = (newPanel: number) => {
-      setCurrentPanel(newPanel);
-  
-      if (contentRef.current) {
-        const pageSize = window.innerHeight;
-        contentRef.current.scrollTop = (newPanel - 1) * pageSize;
-      }
-    };
-  
-    const generatePageNumbers = () => {
-      const numPanels = panelContent.length;
-      const maxPages = Math.ceil(numPanels / 3);
-      const pages = [];
-  
-      for (let i = 1; i <= maxPages; i++) {
-        pages.push(i);
-      }
-  
-      return pages;
-    };
+
+    useEffect(() => {
+      const foundPanels = renderPanels();
+      setPanelElements(foundPanels);
+    }, [generatedBiosArray]);
   
     return (
       <div
@@ -238,10 +204,7 @@ export function InterviewPage({ params, intervieweeData }: any) {
           AI Proxy
         </div>
   
-  
-  
         {renderPanels()}
-  
         
   
         {/* Conditional rendering for buttons, page numbers, and timer */}
