@@ -11,17 +11,19 @@ const openai = new OpenAIApi(config);
 export const runtime = 'edge';
 
 export async function POST(req: Request) {
-  const { messages } = await req.json();
+  const { messages, intervieweeData } = await req.json();
 
-  console.log("local transcript value: " +  JSON.stringify(messages));
-
+  console.log("Time of request: " + new Date().toISOString());
+  console.log("interview tokenId" + intervieweeData.tokenId);
+  console.log("interviewee email" + intervieweeData.email);
+  console.log("local transcript value: " +  JSON.stringify(messages, null, 2));
+  
   // Ask OpenAI for a streaming completion given the prompt
   const response = await openai.createChatCompletion({
     model: 'gpt-3.5-turbo',
     stream: true,
     messages: messages,
   });
-  
 
   // Convert the response into a friendly text-stream
   const stream = OpenAIStream(response);

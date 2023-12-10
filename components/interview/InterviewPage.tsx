@@ -22,7 +22,7 @@ export function InterviewPage({ params, intervieweeData }: any) {
   
     const { input, setInput, handleSubmit, isLoading, messages, setMessages } = useChat({
       body: {
-        vibe
+        intervieweeData
       }
     });
 
