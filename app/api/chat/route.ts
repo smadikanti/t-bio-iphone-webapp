@@ -14,8 +14,8 @@ export async function POST(req: Request) {
   const { messages, intervieweeData } = await req.json();
 
   console.log("Time of request: " + new Date().toISOString());
-  console.log("interview tokenId" + intervieweeData.tokenId);
-  console.log("interviewee email" + intervieweeData.email);
+  console.log("interview tokenId: " + intervieweeData.tokenId);
+  console.log("interviewee email: " + intervieweeData.email);
   
   // Ask OpenAI for a streaming completion given the prompt
   const response = await openai.createChatCompletion({
@@ -27,7 +27,6 @@ export async function POST(req: Request) {
   // Convert the response into a friendly text-stream
   const stream = OpenAIStream(response, {
     async onCompletion(completion) {
-      const title =messages[0].content.substring(0, 100)
       const createdAt = Date.now()
       const id = nanoid();
       const path = `/chat/${id}`
@@ -44,6 +43,7 @@ export async function POST(req: Request) {
         ]
       }
       console.log("response payload: " + JSON.stringify(payload, null, 2));
+      console.log("response completion for " + intervieweeData.tokenId + ": " + completion);
     }
   })
   // Respond with the stream
