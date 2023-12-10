@@ -1,5 +1,5 @@
 import { Configuration, OpenAIApi } from 'openai-edge';
-import { OpenAIStream, StreamingTextResponse } from 'ai';
+import { OpenAIStream, StreamingTextResponse, nanoid } from 'ai';
 
 // Create an OpenAI API client (that's edge friendly!)
 const config = new Configuration({
@@ -16,7 +16,6 @@ export async function POST(req: Request) {
   console.log("Time of request: " + new Date().toISOString());
   console.log("interview tokenId" + intervieweeData.tokenId);
   console.log("interviewee email" + intervieweeData.email);
-  console.log("local transcript value: " +  JSON.stringify(messages, null, 2));
   
   // Ask OpenAI for a streaming completion given the prompt
   const response = await openai.createChatCompletion({
@@ -26,7 +25,27 @@ export async function POST(req: Request) {
   });
 
   // Convert the response into a friendly text-stream
-  const stream = OpenAIStream(response);
+  const stream = OpenAIStream(response, {
+    async onCompletion(completion) {
+      const title =messages[0].content.substring(0, 100)
+      const createdAt = Date.now()
+      const id = nanoid();
+      const path = `/chat/${id}`
+      const payload = {
+        tokenId: intervieweeData.tokenId,
+        createdAt,
+        path,
+        messages: [
+          ...messages,
+          {
+            content: completion,
+            role: 'assistant'
+          }
+        ]
+      }
+      console.log("response payload: " + JSON.stringify(payload, null, 2));
+    }
+  })
   // Respond with the stream
   return new StreamingTextResponse(stream);
 }
