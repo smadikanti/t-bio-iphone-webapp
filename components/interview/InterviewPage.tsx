@@ -17,9 +17,6 @@ export function InterviewPage({ params, intervieweeData }: any) {
     const [buttonPressCount, setButtonPressCount] = useState(0);
     const [generatedBiosArray, setGeneratedBiosArray] = useState([] as string[]);
   
-    const [bio, setBio] = useState('');
-    const [vibe, setVibe] = useState<VibeType>("Interview");
-  
     const { input, setInput, handleSubmit, isLoading, messages, setMessages } = useChat({
       body: {
         intervieweeData
@@ -80,7 +77,7 @@ export function InterviewPage({ params, intervieweeData }: any) {
     const onSubmit = (event: any) => {
       // save the current message to the bios array
       const oldBiosArray = generatedBiosArray;
-      if (generatedBios !== '' && generatedBios) {
+      if (generatedBios) {
         oldBiosArray.push(generatedBios);
         console.log("oldBiosArray: ", oldBiosArray)
         setGeneratedBiosArray(oldBiosArray);
@@ -100,7 +97,7 @@ export function InterviewPage({ params, intervieweeData }: any) {
               targetPanel.scrollIntoView({ behavior: 'smooth' });
           }
         }
-      }, 200);
+      }, 220);
 
       setButtonPressCount(buttonPressCount + 1);
       console.log("buttonPressCount: ", buttonPressCount);
@@ -114,7 +111,7 @@ export function InterviewPage({ params, intervieweeData }: any) {
         setInput(transcriptBuffer);
       };
   
-      const interval = setInterval(updateTranscript, 100);
+      const interval = setInterval(updateTranscript, 50);
   
       return () => clearInterval(interval);
     }, []);
@@ -139,7 +136,7 @@ export function InterviewPage({ params, intervieweeData }: any) {
         }
       }
 
-      const generatedBiosArrayWithPadding = [...generatedBiosArray, ''];
+      const generatedBiosArrayWithPadding = [...generatedBiosArray, '', '', '', ''];
 
       const foundPanels = generatedBiosArrayWithPadding.map((content, index) => (
           <form
