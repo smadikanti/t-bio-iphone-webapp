@@ -10,30 +10,19 @@ const MAX_TRANSCRIPT_CHAR_LENGTH = MAX_TRANSCRIPT_TOKEN_LENGTH * DEFAULT_CHARACT
 
 export function InterviewPage({ params, intervieweeData }: any) {
 
-  const [responseMode, setResponseMode] = useState('full'); // 'full' for full answers, 'bullet' for bullet points
-
-  const handleResponseModeChange = (mode: string) => {
-    setResponseMode(mode);
-};
-
+  //  LOGIC TO UDPATE DB ABOUT THE ENDED TIME 
   const handlePageRefresh = async () => {
     console.log('Page is being refreshed');
-    
     try {
       console.log("Attempting to log end event in the db");
-      
-      // Assuming putEndedEventDataForTokenId returns a Promise
-      await putEndedEventDataForTokenId(params.token_id, "Jonathan");
-      
+      await putEndedEventDataForTokenId(params.token_id, intervieweeData.CandidateName);
       console.log("End event logging complete");
     } catch (error) {
       console.error("Error logging end event:", error);
     }
-  
     alert('Page is being refreshed');
   };
   
-
   useEffect(() => {
       // Add an event listener to detect page refresh (beforeunload)
       window.addEventListener('beforeunload', handlePageRefresh);
@@ -50,9 +39,7 @@ export function InterviewPage({ params, intervieweeData }: any) {
 
 
 
-
-
-
+  const [responseMode, setResponseMode] = useState('full'); // 'full' for full answers, 'bullet' for bullet points
 
     const [textSize, setTextSize] = useState('medium');
     const [panelElements, setPanelElements] = useState([] as any[]);
@@ -60,7 +47,12 @@ export function InterviewPage({ params, intervieweeData }: any) {
     const contentRef = useRef<HTMLDivElement>(null);
     const [buttonPressCount, setButtonPressCount] = useState(0);
     const [generatedBiosArray, setGeneratedBiosArray] = useState([] as string[]);
-  
+
+
+    const handleResponseModeChange = (mode: string) => {
+      setResponseMode(mode);
+    };
+
     const { input, setInput, handleSubmit, isLoading, messages, setMessages } = useChat({
       body: {
         intervieweeData
@@ -80,10 +72,35 @@ export function InterviewPage({ params, intervieweeData }: any) {
         totalLength += filteredMessages[i].content.length;
       }
 
+      // Algorithm
+      // Meta Prompt
+      // You are a principal software engineer that is mentoring an engineer in how to answer the best way possible to 
+      // succeed in a job interview. Clearing this interview and getting the role is highly important for this user.
+      // Take into consideration the resume given, the job description and the ongoing conversation to answer and keep
+      // the conversation going.
+      // In case, there is a technical question asked - answer concisely, explain for what is asked without any bullshit.
+      // in case, a behavioral question is asked, answer in the most real form possible, make up scenarios/projects/situations
+      // that suit the person's resume and the job description and the level of expertise to match it up and sound real.
+      // if asked a system design interview question, ask follow up questions, ask doubts to narrow down, drive the interview.
+      // do not answer with repetitions, always only answer for the last question that is asked.
+      // Use the ongoing conversation as a means to keep a flow and to drive the interview.
+  
+      // Resume + JD
+      // RESUME IS HERE
+      // {CANDIDATE_RESUME_PLACEHOLDER}
+      // JD IS HERE
+      // {CANDIDATE_JD_PLACEHOLDER}
+      // Here is the ongoing conversation
+      // {ONGOING_CONVERSATION_PLACEHOLDER} 
+      // - this is only sourced from the audio transcription
+      // - this to be trimmed to make sure there is room for solution within the AI's context limit
+
+      
       const resumeContext = `Pretend to be this interviewee and answer questions to pass the job interview.
         When giving answers, use the STAR method and be direct and concise. Use specific details
         and clear explanations to demonstrate the validity of your experience.
         Interviewee\'s resume: ` + intervieweeData.resume;
+
       const jobDescription = 'Current interview\s job description: ' + intervieweeData.jobDescription;
 
       // add resume and job description to the beginning of the transcript if they are not already there
