@@ -252,7 +252,7 @@ export function InterviewPage({ params, intervieweeData }: any) {
         {!hideContent && (
           <>
             {/* Text size buttons (bottom left) */}
-            <div style={{ position: 'fixed', bottom: '20px', left: '20px' }}>
+            <div style={{ position: 'fixed', bottom: '20px', right: '20px' }}>
               <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                 <button
                   onClick={() => handleTextSizeChange('small')}
@@ -294,7 +294,7 @@ export function InterviewPage({ params, intervieweeData }: any) {
 
 
             {/* CONTENT OUTPUT MODIFICATION */}
-  <div style={{ position: 'fixed', bottom: '20px', right: '20px' }}> {/* Adjust the position as needed */}
+  <div style={{ position: 'fixed', top: '20px', right: '20px' }}> {/* Adjust the position as needed */}
   <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
     <button
       onClick={() => handleResponseModeChange('bullet')}
