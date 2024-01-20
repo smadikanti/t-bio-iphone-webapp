@@ -12,19 +12,6 @@ const MAX_TRANSCRIPT_CHAR_LENGTH = MAX_TRANSCRIPT_TOKEN_LENGTH * DEFAULT_CHARACT
 
 export function InterviewPage({ params, intervieweeData }: any) {
 
-  //   // Function to handle page refresh
-  //   const handlePageRefresh = () => {
-  //     // Perform actions here, such as updating data in the database
-  //     console.log('Page is being refreshed');
-  //     // You can make an API call to update data in the database here
-  //     console.log("Attempting to log end event in the db")
-  //     const putEventForTheUserSessionInDb = putEndedEventDataForTokenId(params.token_id, "Jonathan");
-  //     console.log("End event logging complete")
-  //     // END THE INTERVIEW
-
-  //     // Print a message
-  //     alert('Page is being refreshed'); // You can use any UI component to display the message
-  // };
 
   const handlePageRefresh = async () => {
     console.log('Page is being refreshed');

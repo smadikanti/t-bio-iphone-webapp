@@ -19,7 +19,7 @@ export default function ProtectedPage({ params }: any) {
         if (isInterviewStarted) {
             return <InterviewPage params={params} intervieweeData={intervieweeData}/>;
         } else {
-            return <IntroPage onStartInterview={handleStartInterview} />;
+            return <IntroPage onStartInterview={handleStartInterview} intervieweeData={intervieweeData}/>;
         }
     }
 
