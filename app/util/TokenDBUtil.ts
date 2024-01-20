@@ -98,5 +98,58 @@ export async function putEndedEventDataForTokenId(tokenId: string, candidateName
   }
 }
 
+// export async function getResumeInText(tokenId: string): Promise<string | null> {
+//   // Construct the URL with the tokenId as a query parameter
+//   const url = new URL("/api/get-resume-from-s3", window.location.origin);
+//   url.searchParams.append('tokenId', tokenId);
+  
+//   console.log("Constructed URL:", url.toString());
+
+//   try {
+//     const response = await fetch(url.toString(), {
+//       method: "GET",
+//       headers: { 'Content-Type': 'application/json' },
+//     });
+
+//     console.log("Fetch request made.");
+
+//     if (response.status === 200) {
+//       const resumeText = await response.text();
+//       console.log("Resume text fetched:", resumeText);
+//       return resumeText;
+//     } else {
+//       console.error("Error fetching resume in text:", response.status, response.statusText);
+//       return null;
+//     }
+//   } catch (error) {
+//     console.error("An error occurred while making the request:", error);
+//     return null;
+//   }
+// }
+export async function getResumeInText(tokenId: string) {
+  try {
+      const response = await fetch('/api/resume-from-s3', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ tokenId })
+      });
+
+      if (!response.ok) {
+          throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      return data;
+  } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
+  }
+}
+
+
+
+
+
 
 
