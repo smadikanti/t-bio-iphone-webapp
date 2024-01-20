@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { IntroPage } from '../../../components/interview/IntroPage';
 import { InterviewPage } from '../../../components/interview/InterviewPage';
 import { NoAccessPage } from '../../../components/interview/NoAccessPage';
-import { getDataForTokenId } from '../../util/TokenDBUtil';
+import { getDataForTokenId, putStartedEventDataForTokenId } from '../../util/TokenDBUtil';
 import { set } from 'react-hook-form';
 
 export default function ProtectedPage({ params }: any) {
@@ -30,6 +30,11 @@ export default function ProtectedPage({ params }: any) {
             setIntervieweeData(result);
             if (result) {
                 setHasAcceptedToken(true);
+                // check if the allowed duration is still valid
+                // TODOSMAD: create entry in event tracking table with tokenId, companyId, candidateName, startTime
+                console.log("Attempting to log start event in the db")
+                const putEventForTheUserSessionInDb = await putStartedEventDataForTokenId(params.token_id, result.firstName, result.startTime);
+                console.log("Start event logging complete")
             } else {
                 setHasAcceptedToken(false);
             }

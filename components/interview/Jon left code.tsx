@@ -4,66 +4,12 @@ import RevViewHelper from '../RevViewHelper';
 import DropDown, { VibeType } from '../DropDown';
 import { doStream, transcriptBuffer } from '../RevAI';
 import { useChat } from 'ai/react';
-import { putEndedEventDataForTokenId } from '../../app/util/TokenDBUtil';
 
 const MAX_TRANSCRIPT_TOKEN_LENGTH = 4000;
 const DEFAULT_CHARACTERS_PER_TOKEN = 4;
 const MAX_TRANSCRIPT_CHAR_LENGTH = MAX_TRANSCRIPT_TOKEN_LENGTH * DEFAULT_CHARACTERS_PER_TOKEN;
 
 export function InterviewPage({ params, intervieweeData }: any) {
-
-  //   // Function to handle page refresh
-  //   const handlePageRefresh = () => {
-  //     // Perform actions here, such as updating data in the database
-  //     console.log('Page is being refreshed');
-  //     // You can make an API call to update data in the database here
-  //     console.log("Attempting to log end event in the db")
-  //     const putEventForTheUserSessionInDb = putEndedEventDataForTokenId(params.token_id, "Jonathan");
-  //     console.log("End event logging complete")
-  //     // END THE INTERVIEW
-
-  //     // Print a message
-  //     alert('Page is being refreshed'); // You can use any UI component to display the message
-  // };
-
-  const handlePageRefresh = async () => {
-    console.log('Page is being refreshed');
-    
-    try {
-      console.log("Attempting to log end event in the db");
-      
-      // Assuming putEndedEventDataForTokenId returns a Promise
-      await putEndedEventDataForTokenId(params.token_id, "Jonathan");
-      
-      console.log("End event logging complete");
-    } catch (error) {
-      console.error("Error logging end event:", error);
-    }
-  
-    alert('Page is being refreshed');
-  };
-  
-
-  useEffect(() => {
-      // Add an event listener to detect page refresh (beforeunload)
-      window.addEventListener('beforeunload', handlePageRefresh);
-
-      // Add an event listener to detect page unload (unload)
-      window.addEventListener('unload', handlePageRefresh);
-
-      // Clean up the event listeners when the component unmounts
-      return () => {
-          window.removeEventListener('beforeunload', handlePageRefresh);
-          window.removeEventListener('unload', handlePageRefresh);
-      };
-  }, []); // Empty dependency array to ensure it's only added once
-
-
-
-
-
-
-
     const [textSize, setTextSize] = useState('medium');
     const [panelElements, setPanelElements] = useState([] as any[]);
     const [hideContent, setHideContent] = useState(false);
@@ -304,7 +250,7 @@ export function InterviewPage({ params, intervieweeData }: any) {
   
             {/* Include the CountdownTimer component (top right) */}
             <div style={{ position: 'fixed', top: '20px', right: '20px' }}>
-              {/* <CountdownTimer /> */}
+              <CountdownTimer />
             </div>
           </>
         )}
