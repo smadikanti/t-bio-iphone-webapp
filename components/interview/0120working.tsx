@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
+import CountdownTimer from '../CountdownTimer';
 import RevViewHelper from '../RevViewHelper';
+import DropDown, { VibeType } from '../DropDown';
 import { doStream, transcriptBuffer } from '../RevAI';
 import { useChat } from 'ai/react';
 import { putEndedEventDataForTokenId } from '../../app/util/TokenDBUtil';
@@ -10,11 +12,6 @@ const MAX_TRANSCRIPT_CHAR_LENGTH = MAX_TRANSCRIPT_TOKEN_LENGTH * DEFAULT_CHARACT
 
 export function InterviewPage({ params, intervieweeData }: any) {
 
-  const [responseMode, setResponseMode] = useState('full'); // 'full' for full answers, 'bullet' for bullet points
-
-  const handleResponseModeChange = (mode: string) => {
-    setResponseMode(mode);
-};
 
   const handlePageRefresh = async () => {
     console.log('Page is being refreshed');
@@ -291,37 +288,6 @@ export function InterviewPage({ params, intervieweeData }: any) {
                 </button>
               </div>
             </div>
-
-
-            {/* CONTENT OUTPUT MODIFICATION */}
-  <div style={{ position: 'fixed', bottom: '20px', right: '20px' }}> {/* Adjust the position as needed */}
-  <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-    <button
-      onClick={() => handleResponseModeChange('bullet')}
-      style={{
-        marginLeft: '10px',
-        backgroundColor: responseMode === 'bullet' ? 'black' : 'transparent',
-        color: responseMode === 'bullet' ? 'white' : 'black',
-        padding: '5px 10px',
-        borderRadius: '5px',
-      }}
-    >
-      Bullet Points
-    </button>
-    <button
-      onClick={() => handleResponseModeChange('full')}
-      style={{
-        backgroundColor: responseMode === 'full' ? 'black' : 'transparent',
-        color: responseMode === 'full' ? 'white' : 'black',
-        padding: '5px 10px',
-        borderRadius: '5px',
-      }}
-    >
-      Full Answers
-    </button>
-  </div>
-</div>
-
   
             {/* Include the CountdownTimer component (top right) */}
             <div style={{ position: 'fixed', top: '20px', right: '20px' }}>
@@ -340,6 +306,22 @@ export function InterviewPage({ params, intervieweeData }: any) {
         {/* Start Interview button */}
         <div style={{ position: 'fixed', bottom: '20px', left: '200px' }}>
         <RevViewHelper/>
+          
+          {/* <button
+            id="streamButton"
+            onClick={() => {
+              doStream();
+              console.log('Interview started!'); // Add a console.log for debugging
+            }}
+            style={{
+              backgroundColor: 'blue',
+              color: 'white',
+              padding: '10px 20px',
+              borderRadius: '5px',
+            }}
+          >
+            Start Interview
+          </button> */}
           <p id="status"></p>
           <table id="messages"></table>
         </div>
