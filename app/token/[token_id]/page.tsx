@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { IntroPage } from '../../../components/interview/IntroPage';
 import { InterviewPage } from '../../../components/interview/InterviewPage';
 import { NoAccessPage } from '../../../components/interview/NoAccessPage';
-import { getDataForTokenId, putStartedEventDataForTokenId, getResumeInText } from '../../util/TokenDBUtil';
+import { getDataForTokenId, putStartedEventDataForTokenId, getResumeInText, getJdInText } from '../../util/TokenDBUtil';
 import { set } from 'react-hook-form';
 
 export default function ProtectedPage({ params }: any) {
@@ -31,13 +31,17 @@ export default function ProtectedPage({ params }: any) {
             console.log(`"smad: log 1: printing params.token_id: ${params.token_id}"`)
             const resumeInTextFromS3 = await getResumeInText(params.token_id);
             console.log(`"smad log final: resume is on the page: ${resumeInTextFromS3}"`)
+
+            const jdInTextFromS3 = await getJdInText(params.token_id);
+            console.log(`"smad log final: JD is on the page: ${jdInTextFromS3}"`)
             // setIntervieweeData(result);
             // intervieweeData.resumeFromS3 = resumeInTextFromS3;
 
             setIntervieweeData({
                 ...result,
-                resumeFromS3: resumeInTextFromS3
-              });
+                resumeFromS3: resumeInTextFromS3,
+                jdFromS3: jdInTextFromS3
+            });
               
 
             // TODOSMAD: set resume here as well

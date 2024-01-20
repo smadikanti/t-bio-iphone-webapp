@@ -147,6 +147,27 @@ export async function getResumeInText(tokenId: string) {
   }
 }
 
+export async function getJdInText(tokenId: string) {
+  try {
+      const response = await fetch('/api/jd-from-s3', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ tokenId })
+      });
+
+      if (!response.ok) {
+          throw new Error('Network response was not ok');
+      }
+
+      const data = await response.json();
+      return data;
+  } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
+  }
+}
+
 
 
 

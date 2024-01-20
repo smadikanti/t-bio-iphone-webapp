@@ -14,8 +14,8 @@ export async function POST(req: Request, res: Response) {
 
       const s3 = new S3(); // Specify your AWS region
 
-      const bucketName = 'aiproxy-company-managed-resume-bucket'; // Your bucket name
-      const key = `resume/${tokenId}.txt`; // Filename in the bucket
+      const bucketName = 'aiproxy-company-managed-jd-bucket'; // Your bucket name
+      const key = `job_description/${tokenId}.txt`; // Filename in the bucket
 
       console.log("Bucket Name:", bucketName); // Log the bucket name
       console.log("FileName Name:", key); // Log the bucket name
