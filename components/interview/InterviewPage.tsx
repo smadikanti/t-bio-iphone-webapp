@@ -100,7 +100,8 @@ useEffect(() => {
       that suit the person's resume and the job description and the level of expertise to match it up and sound real.
       if asked a system design interview question, ask follow up questions, ask doubts to narrow down, drive the interview.
       do not answer with repetitions, always only answer for the last question that is asked.
-      Use the ongoing conversation as a means to keep a flow and to drive the interview.`
+      Use the ongoing conversation as a means to keep a flow and to drive the interview.
+      FOR OUTPUT FORMAT: GIVE `
     
       // Define context information
       // let resumeContext = `Pretend to be this interviewee and answer questions to pass the job interview.
@@ -108,7 +109,7 @@ useEffect(() => {
       //   and clear explanations to demonstrate the validity of your experience.
       //   Interviewee's resume: `;
 
-      let metaPromptAndResumeContext = metaPrompt + intervieweeData.resumeFromS3;
+      let metaPromptAndResumeContext = metaPrompt + responseMode + `Here is the resume`  + intervieweeData.resumeFromS3;
     
       const jobDescription = 'Current interview\'s job description: ' + intervieweeData.jdFromS3;
     
