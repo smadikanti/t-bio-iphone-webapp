@@ -8,11 +8,10 @@ interface EventData {
   tokenId: string; // Updated to include tokenId
   companyId: string; // Updated to include companyId
   candidateName: string; // Added candidateName
-  startTime: string;
 }
 
   // define current time stamp
-  const currentTimestamp = new Date().toISOString();
+const currentTimestamp = new Date().toISOString();
 
 
 const dynamoDB = new DynamoDB.DocumentClient({

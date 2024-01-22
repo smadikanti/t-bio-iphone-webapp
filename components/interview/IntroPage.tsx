@@ -1,9 +1,19 @@
 // Import necessary modules and components
+import { getDataForTokenId, putStartedEventDataForTokenId, getResumeInText, getJdInText } from '../../app/util/TokenDBUtil';
+
 
 export function IntroPage({ onStartInterview, intervieweeData }: any) {
     // Function to handle starting the interview
     const handleStartInterview = () => {
         if (onStartInterview) {
+
+            /// USER CLICKED START INTERVIEW BUTTON
+
+            console.log("Attempting to log start event in the db")
+            const putEventForTheUserSessionInDb = putStartedEventDataForTokenId(intervieweeData.token_id, intervieweeData.CandidateName);
+            console.log("Start event logging complete")
+
+
             onStartInterview();
         }
     };

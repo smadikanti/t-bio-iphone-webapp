@@ -51,9 +51,9 @@ export default function ProtectedPage({ params }: any) {
                 setHasAcceptedToken(true);
                 // check if the allowed duration is still valid
                 // TODOSMAD: create entry in event tracking table with tokenId, companyId, candidateName, startTime
-                console.log("Attempting to log start event in the db")
-                const putEventForTheUserSessionInDb = await putStartedEventDataForTokenId(params.token_id, result.firstName, result.startTime);
-                console.log("Start event logging complete")
+                // console.log("Attempting to log start event in the db")
+                // const putEventForTheUserSessionInDb = await putStartedEventDataForTokenId(params.token_id, result.firstName, result.startTime);
+                // console.log("Start event logging complete")
             } else {
                 setHasAcceptedToken(false);
             }

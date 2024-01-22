@@ -43,11 +43,10 @@ if (response.status === 200) {
 return null;
 }
 
-export async function putStartedEventDataForTokenId(tokenId: string, candidateName: string, startTime: string): Promise<boolean> {
+export async function putStartedEventDataForTokenId(tokenId: string, candidateName: string): Promise<boolean> {
   const requestData = {
     tokenId,
     candidateName,
-    startTime,
   };
 
   const request = new Request("/api/started-event", {
