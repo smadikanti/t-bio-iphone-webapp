@@ -77,7 +77,7 @@ export async function POST(req: Request) {
     TableName: 'aiproxy-company-based-billed-duration-events', // Replace with your DynamoDB table name
     Key: {
       eventId: eventId, // Specify the eventId you want to retrieve
-      companyId: "eventData.companyId"
+      companyId: eventData.companyId
     },
   };
 
@@ -89,9 +89,24 @@ export async function POST(req: Request) {
     if (result.Item) {
       // Record with the specified eventId was found
       const eventData = result.Item;
+      eventData.endTime = new Date().toISOString();
+      // BILLED MINUTES CALCULATION
+
+
+            // Parse the timestamps into Date objects
+      const startDate = new Date(eventData.startTime);
+      const endDate = new Date(eventData.endTime);
+
+      // Calculate the time difference in milliseconds
+      const timeDifference = Number(endDate) - Number(startDate);
+
+      // Convert milliseconds to minutes and round it to an integer
+      const billedMinutes = Math.ceil(timeDifference / (1000 * 60));
+
 
       // Update the endTime field with the current timestamp
-      eventData.endTime = new Date().toISOString();
+
+      eventData.billedMinutes = billedMinutes;
 
       // Now, you can update the existing record in DynamoDB
       await dynamoDB.put({

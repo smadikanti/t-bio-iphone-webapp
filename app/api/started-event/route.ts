@@ -10,8 +10,7 @@ interface EventData {
   candidateName: string; // Added candidateName
 }
 
-  // define current time stamp
-const currentTimestamp = new Date().toISOString();
+
 
 
 const dynamoDB = new DynamoDB.DocumentClient({
@@ -25,17 +24,19 @@ const dynamoDB = new DynamoDB.DocumentClient({
 export async function POST(req: Request) {
   const body = await req.json();
   const eventData: EventData = body;
-
+  // define current time stamp
+  const currentTimestamp = new Date().toISOString();
   const params = {
     TableName: 'aiproxy-company-based-billed-duration-events', // Replace with your DynamoDB table name
     Item: {
     // generate event id each session, but, trash event id after the session, create a new one.
       eventId: eventData.eventId,
       tokenId: eventData.tokenId, // Updated to use tokenId from the request
-      companyId: "eventData.companyId", // Updated to use companyId from the request
+      companyId: eventData.companyId, // Updated to use companyId from the request
       candidateName: eventData.candidateName, // Added candidateName from the request
       startTime: currentTimestamp,
-      endTime: ""
+      endTime: "",
+      billedMinutes: 0
     },
   };
 

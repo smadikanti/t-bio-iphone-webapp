@@ -14,8 +14,11 @@ export function InterviewPage({ params, intervieweeData, currentEventId }: any) 
 const handlePageRefresh = async () => {
     console.log('Page is being refreshed');
     try {
+
+      // LOG END TIME OF THE EVENT
+
       console.log("Attempting to log end event in the db");
-      await putEndedEventDataForTokenId(params.token_id, intervieweeData.CandidateName, currentEventId);
+      await putEndedEventDataForTokenId(params.token_id, intervieweeData.CandidateName, intervieweeData.companyId, currentEventId);
       console.log("End event logging complete");
     } catch (error) {
       console.error("Error logging end event:", error);
@@ -340,7 +343,12 @@ const handlePageRefresh = async () => {
                 justifyContent: 'center',
                 alignItems: 'center',
                 scrollSnapAlign: 'start',
-                backgroundColor: index % 2 === 0 ? '#f8f9fa' : '#e9ecef',
+                // COLORS OF PANELS
+                // backgroundColor: index % 2 === 0 ? '#f8f9fa' : '#e9ecef',
+                backgroundColor: index % 2 === 0 ? '#f8f9fa' : '#d9dee4',
+
+                // backgroundColor: index % 2 === 0 ? 'white' : 'black-100',
+
                 border: 'none', 
                 padding: 0, 
                 width: '100%',

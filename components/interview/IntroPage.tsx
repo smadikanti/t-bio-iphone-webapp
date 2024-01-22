@@ -9,8 +9,10 @@ export function IntroPage({ onStartInterview, intervieweeData, currentEventId }:
 
             /// USER CLICKED START INTERVIEW BUTTON
 
+            // LOG START TIME OF THE EVENT
+      
             console.log("Attempting to log start event in the db")
-            const putEventForTheUserSessionInDb = putStartedEventDataForTokenId(intervieweeData.token_id, intervieweeData.CandidateName, currentEventId);
+            const putEventForTheUserSessionInDb = putStartedEventDataForTokenId(intervieweeData.tokenId, intervieweeData.CandidateName, intervieweeData.companyId, currentEventId);
             console.log("Start event logging complete")
 
 
