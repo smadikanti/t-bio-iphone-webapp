@@ -90,12 +90,25 @@ useEffect(() => {
       for (let i = 0; i < filteredMessages.length; i++) {
         totalLength += filteredMessages[i].content.length;
       }
+
+      const metaPrompt = `You are a principal software engineer that is mentoring an engineer in how to answer the best way possible to
+      succeed in a job interview. Clearing this interview and getting the role is highly important for this user.
+      Take into consideration the resume given, the job description and the ongoing conversation to answer and keep
+      the conversation going.
+      In case, there is a technical question asked - answer concisely, explain for what is asked without any bullshit.
+      in case, a behavioral question is asked, answer in the most real form possible, make up scenarios/projects/situations
+      that suit the person's resume and the job description and the level of expertise to match it up and sound real.
+      if asked a system design interview question, ask follow up questions, ask doubts to narrow down, drive the interview.
+      do not answer with repetitions, always only answer for the last question that is asked.
+      Use the ongoing conversation as a means to keep a flow and to drive the interview.`
     
       // Define context information
-      const resumeContext = `Pretend to be this interviewee and answer questions to pass the job interview.
-        When giving answers, use the STAR method and be direct and concise. Use specific details
-        and clear explanations to demonstrate the validity of your experience.
-        Interviewee's resume: ` + intervieweeData.resumeFromS3;
+      // let resumeContext = `Pretend to be this interviewee and answer questions to pass the job interview.
+      //   When giving answers, use the STAR method and be direct and concise. Use specific details
+      //   and clear explanations to demonstrate the validity of your experience.
+      //   Interviewee's resume: `;
+
+      let metaPromptAndResumeContext = metaPrompt + intervieweeData.resumeFromS3;
     
       const jobDescription = 'Current interview\'s job description: ' + intervieweeData.jdFromS3;
     
@@ -106,8 +119,8 @@ useEffect(() => {
       // ADDING META PROMPT + RESUME TO FIRST 
       // SMAD TODO: ONE SMAD
       // add meta prompt + resume + jd to the system prompt if system prompt has no limitation
-      if (filteredMessages.length <= 1 || filteredMessages[0].content !== resumeContext) {
-        filteredMessages.unshift({ role: 'system', content: resumeContext });
+      if (filteredMessages.length <= 1 || filteredMessages[0].content !== metaPromptAndResumeContext) {
+        filteredMessages.unshift({ role: 'system', content: metaPromptAndResumeContext });
       }
 
       // ADDING SYSTEM PROMPT
