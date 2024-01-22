@@ -1,3 +1,8 @@
+// TODO SMAD
+// FOR TRACKING END TIME, START UPDATING DB WITH EACH TAP THAT IS DONE ON THE SCREEN
+// THIS WAY WE CAN TRACK STARTED INTERVIEW + LAST TAP THAT HAS BEEN DONE
+// CONS: MULTIPLE UPDATES TO DDB
+
 import React, { useState, useRef, useEffect } from 'react';
 import RevViewHelper from '../RevViewHelper';
 import { doStream, transcriptBuffer } from '../RevAI';
@@ -24,21 +29,21 @@ const handlePageRefresh = async () => {
       console.error("Error logging end event:", error);
     }
     alert('Page is being refreshed');
-  };
+};
   
-  useEffect(() => {
-      // Add an event listener to detect page refresh (beforeunload)
-      window.addEventListener('beforeunload', handlePageRefresh);
+useEffect(() => {
+    // Add an event listener to detect page refresh (beforeunload)
+    window.addEventListener('beforeunload', handlePageRefresh);
 
-      // Add an event listener to detect page unload (unload)
-      window.addEventListener('unload', handlePageRefresh);
+    // Add an event listener to detect page unload (unload)
+    window.addEventListener('unload', handlePageRefresh);
 
-      // Clean up the event listeners when the component unmounts
-      return () => {
-          window.removeEventListener('beforeunload', handlePageRefresh);
-          window.removeEventListener('unload', handlePageRefresh);
-      };
-  }, []); // Empty dependency array to ensure it's only added once
+    // Clean up the event listeners when the component unmounts
+    return () => {
+        window.removeEventListener('beforeunload', handlePageRefresh);
+        window.removeEventListener('unload', handlePageRefresh);
+    };
+}, []); // Empty dependency array to ensure it's only added once
 
 
 
@@ -90,9 +95,9 @@ const handlePageRefresh = async () => {
       const resumeContext = `Pretend to be this interviewee and answer questions to pass the job interview.
         When giving answers, use the STAR method and be direct and concise. Use specific details
         and clear explanations to demonstrate the validity of your experience.
-        Interviewee's resume: ` + intervieweeData.resume;
+        Interviewee's resume: ` + intervieweeData.resumeFromS3;
     
-      const jobDescription = 'Current interview\'s job description: ' + intervieweeData.jobDescription;
+      const jobDescription = 'Current interview\'s job description: ' + intervieweeData.jdFromS3;
     
 
       // Add resume and job description to the beginning of the transcript if they are not already there
