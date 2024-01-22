@@ -29,9 +29,9 @@ export function IntroPage({ onStartInterview, intervieweeData, currentEventId }:
 
 
 {/* CHECKING IF RESUME IS REDNERED FROM S3 */}
-                {/* <h1 className="text-4xl font-bold mb-4">RESUME IS SHOWN HERE: {intervieweeData.resumeFromS3}!</h1>
+                <h1 className="text-4xl font-bold mb-4">RESUME IS SHOWN HERE: {intervieweeData.resumeFromS3}!</h1>
 
-                <h1 className="text-4xl font-bold mb-4">JD IS SHOWN HERE: {intervieweeData.jdFromS3}!</h1> */}
+                <h1 className="text-4xl font-bold mb-4">JD IS SHOWN HERE: {intervieweeData.jdFromS3}!</h1>
 
                 {/* Welcome message */}
                 <h1 className="text-4xl font-bold mb-4">Welcome to the VensaTek AI Assist</h1>
