@@ -5,25 +5,32 @@ import { InterviewPage } from '../../../components/interview/InterviewPage';
 import { NoAccessPage } from '../../../components/interview/NoAccessPage';
 import { getDataForTokenId, putStartedEventDataForTokenId, getResumeInText, getJdInText } from '../../util/TokenDBUtil';
 import { set } from 'react-hook-form';
+import { v4 as uuidv4 } from 'uuid'; // Import the UUID generator
 
 export default function ProtectedPage({ params }: any) {
     const [hasAcceptedToken, setHasAcceptedToken] = useState(false);
     const [isInterviewStarted, setIsInterviewStarted] = useState(false);
     const [intervieweeData, setIntervieweeData] = useState({} as any);
+    const [eventId, setEventId] = useState("DefaultEventId");
 
     const handleStartInterview = () => {
         setIsInterviewStarted(true);
     };
 
     const renderInterviewPage = (isInterviewStarted: boolean) => {
+
         if (isInterviewStarted) {
-            return <InterviewPage params={params} intervieweeData={intervieweeData}/>;
+            return <InterviewPage params={params} intervieweeData={intervieweeData} currentEventId={eventId}/>;
         } else {
-            return <IntroPage onStartInterview={handleStartInterview} intervieweeData={intervieweeData}/>;
+            return <IntroPage onStartInterview={handleStartInterview} intervieweeData={intervieweeData} currentEventId={eventId}/>;
         }
     }
 
     useEffect(() => {
+
+                    // FIRST TIME SET EVENTID HERE
+        setEventId(uuidv4());
+
         const checkToken = async () => {
             console.log("fetching data for token id: " + params.token_id);
             const result = await getDataForTokenId(params.token_id);
@@ -42,7 +49,6 @@ export default function ProtectedPage({ params }: any) {
                 resumeFromS3: resumeInTextFromS3,
                 jdFromS3: jdInTextFromS3
             });
-              
 
             // TODOSMAD: set resume here as well
             // TODOSMAD: set jd here as well

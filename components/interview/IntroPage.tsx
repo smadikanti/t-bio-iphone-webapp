@@ -2,7 +2,7 @@
 import { getDataForTokenId, putStartedEventDataForTokenId, getResumeInText, getJdInText } from '../../app/util/TokenDBUtil';
 
 
-export function IntroPage({ onStartInterview, intervieweeData }: any) {
+export function IntroPage({ onStartInterview, intervieweeData, currentEventId }: any) {
     // Function to handle starting the interview
     const handleStartInterview = () => {
         if (onStartInterview) {
@@ -10,7 +10,7 @@ export function IntroPage({ onStartInterview, intervieweeData }: any) {
             /// USER CLICKED START INTERVIEW BUTTON
 
             console.log("Attempting to log start event in the db")
-            const putEventForTheUserSessionInDb = putStartedEventDataForTokenId(intervieweeData.token_id, intervieweeData.CandidateName);
+            const putEventForTheUserSessionInDb = putStartedEventDataForTokenId(intervieweeData.token_id, intervieweeData.CandidateName, currentEventId);
             console.log("Start event logging complete")
 
 

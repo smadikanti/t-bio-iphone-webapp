@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import '../styles/globals.css';
 
 const title = 'AI Proxy';
-const description = 'Automate your interview';
+const description = 'Automate your interview  ';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://twitterbio.io'),

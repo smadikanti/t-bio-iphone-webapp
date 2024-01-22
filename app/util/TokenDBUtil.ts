@@ -43,10 +43,11 @@ if (response.status === 200) {
 return null;
 }
 
-export async function putStartedEventDataForTokenId(tokenId: string, candidateName: string): Promise<boolean> {
+export async function putStartedEventDataForTokenId(tokenId: string, candidateName: string, eventId: string): Promise<boolean> {
   const requestData = {
     tokenId,
     candidateName,
+    eventId
   };
 
   const request = new Request("/api/started-event", {
@@ -70,10 +71,11 @@ export async function putStartedEventDataForTokenId(tokenId: string, candidateNa
   }
 }
 
-export async function putEndedEventDataForTokenId(tokenId: string, candidateName: string): Promise<boolean> {
+export async function putEndedEventDataForTokenId(tokenId: string, candidateName: string, eventId: string): Promise<boolean> {
   const requestData = {
     tokenId,
-    candidateName
+    candidateName,
+    eventId
   };
 
   const request = new Request("/api/ended-event", {

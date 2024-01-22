@@ -8,14 +8,14 @@ const MAX_TRANSCRIPT_TOKEN_LENGTH = 4000;
 const DEFAULT_CHARACTERS_PER_TOKEN = 4;
 const MAX_TRANSCRIPT_CHAR_LENGTH = MAX_TRANSCRIPT_TOKEN_LENGTH * DEFAULT_CHARACTERS_PER_TOKEN;
 
-export function InterviewPage({ params, intervieweeData }: any) {
+export function InterviewPage({ params, intervieweeData, currentEventId }: any) {
 
   //  LOGIC TO UDPATE DB ABOUT THE ENDED TIME 
-  const handlePageRefresh = async () => {
+const handlePageRefresh = async () => {
     console.log('Page is being refreshed');
     try {
       console.log("Attempting to log end event in the db");
-      await putEndedEventDataForTokenId(params.token_id, intervieweeData.CandidateName);
+      await putEndedEventDataForTokenId(params.token_id, intervieweeData.CandidateName, currentEventId);
       console.log("End event logging complete");
     } catch (error) {
       console.error("Error logging end event:", error);
