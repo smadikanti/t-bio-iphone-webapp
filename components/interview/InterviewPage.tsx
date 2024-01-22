@@ -4,6 +4,8 @@
 // CONS: MULTIPLE UPDATES TO DDB
 
 import React, { useState, useRef, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
+
 import RevViewHelper from '../RevViewHelper';
 import { doStream, transcriptBuffer } from '../RevAI';
 import { useChat } from 'ai/react';
@@ -101,7 +103,7 @@ useEffect(() => {
       if asked a system design interview question, ask follow up questions, ask doubts to narrow down, drive the interview.
       do not answer with repetitions, always only answer for the last question that is asked.
       Use the ongoing conversation as a means to keep a flow and to drive the interview.
-      FOR OUTPUT FORMAT: GIVE `
+      FOR OUTPUT FORMAT: GIVE answers in responseMode and give in markdown format.`
     
       // Define context information
       // let resumeContext = `Pretend to be this interviewee and answer questions to pass the job interview.
@@ -109,7 +111,7 @@ useEffect(() => {
       //   and clear explanations to demonstrate the validity of your experience.
       //   Interviewee's resume: `;
 
-      let metaPromptAndResumeContext = metaPrompt + responseMode + `Here is the resume`  + intervieweeData.resumeFromS3;
+      let metaPromptAndResumeContext = metaPrompt + `Here is the resume`  + intervieweeData.resumeFromS3;
     
       const jobDescription = 'Current interview\'s job description: ' + intervieweeData.jdFromS3;
     
@@ -385,7 +387,9 @@ useEffect(() => {
               >
                 {/* {content} */}
                 {/* {transcriptBuffer} */}
+                <ReactMarkdown>
                 {getPanelMessage(index)}
+                </ReactMarkdown>
               </p>
             </button>
           </form>
